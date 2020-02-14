@@ -1,0 +1,3 @@
+#!/bin/bash
+
+PIP_USER=1 PYTHONUSERBASE=/pyroot pipenv install --deploy --system  --ignore-pipfile --dev
