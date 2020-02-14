@@ -8,17 +8,12 @@ ENV PYTHONDONTWRITEBYTECODE 1
 
 RUN pip3 install pipenv
 
-# -- Install Application into container:
-RUN set -ex && mkdir /app
-
-WORKDIR /app
-
 # -- Adding Pipfiles
 ONBUILD COPY Pipfile Pipfile
 ONBUILD COPY Pipfile.lock Pipfile.lock
 
 # -- Install dependencies:
-ONBUILD RUN set -ex && pipenv install --deploy --system
+ONBUILD RUN set -ex && PIP_USER=1 PYTHONUSERBASE=/pyroot pipenv install --deploy --system
 
 # --------------------
 # - Using This File: -
@@ -28,7 +23,8 @@ ONBUILD RUN set -ex && pipenv install --deploy --system
 #
 # FROM python:3.7-slim
 #
-# COPY --from build-pipenv /usr/local/lib/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages
+# COPY --from build-pipenv /pyroot/python3.7/site-packages/ /usr/local/lib/python3.7/site-packages
+# COPY --from build-pipenv /pyroot/bin/ /usr/local/bin
 # COPY . /app
 
 # -- Replace with the correct path to your app's main executable
